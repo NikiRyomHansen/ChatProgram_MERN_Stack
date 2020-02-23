@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <title>Simple Chat App</title>
+</head>
+
+<body>
+<header>
+    <h1>ChatAway</h1>
+</header>
+<section>
+    <div id="rooms">
+        <button id="gbc_common_room" type="button">GBC Common Room</button>
+        <button id="the_corner" type="button">The Corner</button>
+    </div>
+</section>
+
+<section>
+    <div id="change_username">
+        <input id="username" type="text" />
+        <button id="send_username" type="button">Change username</button>
+    </div>
+</section>
+
+<section id="chatroom">
+    <section id="feedback"></section>
+</section>
+
+<section id="input_zone">
+    <p id="is_typing"></p>
+    <input id="message" class="vertical-align" type="text" />
+    <br>
+    <button id="send_message" class="vertical-align" type="button">Send message main</button>
+    <br>
+    <button id="send_message_corner" class="vertical-align" type="button">Send message corner</button>
+</section>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>
