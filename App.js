@@ -161,10 +161,11 @@ io.on('connection', (socket) => {
             socket.emit('empty message');
             return;
         }
-        io.to('the corner room').emit('corner room message', {
-            username: socket.username,
-            message: data.message
-        });
+        const message = sendMessage(socket.id, socket.username, data.message, 'the corner room',
+            'Error saving main room message to the db');
+
+        io.to('the corner room').emit('corner room message', message);
+
 
         // Log sending a message in "the corner room"
         eventLogging(socket.id, socket.username, 'MESSAGE SENT', undefined, undefined,
@@ -209,7 +210,7 @@ function eventLogging(socketId, username, type, date = new Date().toLocaleDateSt
         date: date,
         time: time
     });
-    // Save the instance to the db printing and if error print errorMessage and the error.
+    // Save the instance to the db, if error print errorMessage and the error.
     eventLogConnection.save()
         .catch(err => console.log('***', errorMessage, '***', err));
 }
@@ -224,7 +225,7 @@ function sendMessage(socketId, username, message, room, errorMessage) {
         message: message,
         room: room
     });
-    // Save the instance to the db printing and if error print errorMessage and the error.
+    // Save the instance to the db, if error print errorMessage and the error.
     sendMessage.save()
         .catch(err => console.log('***', errorMessage, '***', err));
 
@@ -241,7 +242,7 @@ function roomLog(socketId, username, joinedRoom = undefined, leftRoom = undefine
         joinedRoom: joinedRoom,
         leftRoom: leftRoom
     });
-    // Save the instance to the db printing and if error print errorMessage and the error.
+    // Save the instance to the db, if error print errorMessage and the error.
     roomLog.save()
         .catch(err => console.log('***', errorMessage, '***', err));
 }
