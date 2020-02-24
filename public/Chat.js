@@ -11,23 +11,24 @@ $(function () {
     const chatRoom = $('#chatroom');
     const isTyping = $('#is_typing');
     const theCornerBtn = $('#the_corner');
+    const userHistory = $('#user_history');
 
-// Emit typing
+    // Emit typing
     message.bind('keypress', () => {
         socket.emit('typing');
     });
 
-// listen on typing
+    // listen on typing
     socket.on('typing', (data) => {
         isTyping.html("<p><i>" + data.username + " is typing a message..." + "</i></p>");
     });
 
-// listen on stop typing
+    // listen on stop typing
     socket.on('not typing', () => {
         isTyping.html("");
     });
 
-// Emit message and not typing to stop the "is typing" from showing after message is sent.
+    // Emit message and not typing to stop the "is typing" from showing after message is sent.
     sendMessage.click(function () {
         socket.emit('main room message', {
             message: message.val()
@@ -36,13 +37,13 @@ $(function () {
         socket.emit('not typing');
     });
 
-// Listen on new_message
+    // Listen on new_message
     socket.on('main room message', (data) => {
         console.log(data);
         chatRoom.append("<p class='message_main'>" + data.username + ": " + data.message + "</p>");
     });
 
-// Emit a username
+    // Emit a username
     changeUsername.click(function () {
         socket.emit('change username', {
             username: username.val()
@@ -71,12 +72,8 @@ $(function () {
     });
 
     socket.on('user disconnected', (data) => {
-       chatRoom.append("<p class='message'>" + data.username + " has disconnected</p>");
+        chatRoom.append("<p class='message'>" + data.username + " has disconnected</p>");
     });
-
-    socket.on('disconnect', () => {
-
-    })
 
     socket.on('empty message', () => {
         chatRoom.append("<p class='message'>Stop trying to send an empty message silly...</p>");
@@ -85,7 +82,7 @@ $(function () {
     // Listen on leaving main room - broadcast message when leaving room
     socket.on('leaving main room', (data) => {
         chatRoom.append("<p class='message'>" + data.username + " has left the chat</p>")
-    })
+    });
 
     // listen on new user in chat and broadcast a message to users
     socket.on('new user in chat', () => {
@@ -107,20 +104,39 @@ $(function () {
         chatRoom.append("<p class='message'>" + data.username + " has joined the channel!</p>");
     });
 
-// Emits a message to the corner room
+    // Emits a message to the corner room
     sendMessageCorner.click(() => {
         socket.emit('corner room message', {
             message: message.val()
         });
+        // Clears the input field
         message.val('');
         socket.emit('not typing');
     });
 
-// Listen on corner room message
+    // Listen on corner room message
     socket.on('corner room message', (data) => {
         chatRoom.append("<p class='message'>" + data.username + ": " + data.message + "</p>");
     });
 
+    // Emits "user history" on click
+    userHistory.click(() => {
+        socket.emit('user history');
+    });
 
-})
-;
+    // TODO: Possibly add an admin who can view the history, so not all users can watch the history
+    // Listen on "display user history" and gets the messages collection from the db.
+    socket.on('display user history', function getMessages() {
+        $.get('http://localhost:8080/api/history', (data) => {
+            chatRoom.append("<p>Chat record from the history collection:</p>")
+            // iterate through each JSON object in the collection and call addMessage to append it into the chatRoom
+            data.forEach(addMessage);
+        });
+    });
+
+    // appends a message to the chatRoom
+    function addMessage(data) {
+        chatRoom.append("<p class='message'>" + data.username + ": " + data.message + "</p>")
+    }
+
+}); // end of function
