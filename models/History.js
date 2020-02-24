@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // instantiate message Schema
-const messages = new Schema(
+const history = new Schema(
     {
         socketId: String,
         username: String,
@@ -14,4 +14,4 @@ const messages = new Schema(
         timestamps: true
     });
 
-module.exports = mongoose.model('messages', messages);
+module.exports = mongoose.model('history', history);

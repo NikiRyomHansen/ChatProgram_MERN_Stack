@@ -1,7 +1,23 @@
 const express = require('express');
 const app = express();
+
+// Require the view route and API routes
+const routes = require('./routes/ApiRoutes');
 app.set('view engine', 'ejs');
+
+// access the public directory for the stylesheet (CSS)
 app.use(express.static('public'));
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+// using middleware to connect our end points??? TODO: Is this correct?
+app.use('/', routes);
+// Listening on port 8080
+server = app.listen(8080, () => {
+    console.log('Listening on port: 8080');
+});
 
 //Import the mongoose module
 const mongoose = require('mongoose');
@@ -18,19 +34,10 @@ mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true})
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // requiring mongoose models
-const messageModel = require('./models/MessagesSchema');
+const historyModel = require('./models/History');
 const eventLog = require('./models/EventLog');
 const roomModel = require('./models/RoomSchema');
 
-// routing
-app.route("/").get((req, res) => {
-    res.render("index");
-});
-
-// Listening on port 8080
-server = app.listen(8080, () => {
-    console.log('Listening on port: 8080');
-});
 // Require socket.io
 const io = require('socket.io')(server);
 
@@ -39,6 +46,17 @@ io.on('connection', (socket) => {
     // Default username to give all connecting clients
     socket.username = "Anonymous";
 
+    // Listen on "user history"
+    socket.on('user history', () => {
+        // Emits "display user history" and sends the mongoose query sending all JSON objects in "history" to the client
+        socket.emit('display user history', (req, res) => {
+            historyModel.find({}, (err, history) => {
+                if (err) return err;
+                res.send(history);
+            });
+        });
+    });
+
     // Log the connected socket to the db.
     eventLogging(socket.id, socket.username, 'CONNECTION', undefined, undefined,
         'Error logging connection');
@@ -46,17 +64,6 @@ io.on('connection', (socket) => {
     // Emit connection successful
     socket.emit('connection successful');
 
-    // // Save joining the main room to the db
-    // const room = new roomModel({
-    //     socketId: socket.id,
-    //     joinedMainRoom: Date.now()
-    // });
-    // room.save(err => {
-    //     if (err) {
-    //         console.log('*** error saving "room" to db', '***', err);
-    //         throw err;
-    //     }
-    // });
     roomLog(socket.id, socket.username, 'main room', undefined,
         'Error saving roomLog to db when joining "main room"');
 
@@ -198,6 +205,8 @@ io.on('connection', (socket) => {
     });
 });
 
+/*--- Functions for saving to the DB ---*/
+
 // Log socket events to eventLog collection
 function eventLogging(socketId, username, type, date = new Date().toLocaleDateString(),
                       time = new Date().toLocaleTimeString(), errorMessage) {
@@ -215,11 +224,11 @@ function eventLogging(socketId, username, type, date = new Date().toLocaleDateSt
         .catch(err => console.log('***', errorMessage, '***', err));
 }
 
-// Log each message sent to the messages collection
+// Log each message sent to the history collection
 function sendMessage(socketId, username, message, room, errorMessage) {
 
-    // Create an instance of the message model
-    const sendMessage = new messageModel({
+    // Create an instance of the history model
+    const sendMessage = new historyModel({
         socketId: socketId,
         username: username,
         message: message,
