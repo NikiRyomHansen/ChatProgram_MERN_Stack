@@ -5,9 +5,10 @@ const app = express();
 const routes = require('./routes/ApiRoutes');
 app.set('view engine', 'ejs');
 
-// access the public directory for the stylesheet (CSS)
+// adding the public directory to our middleware, our CSS is here
 app.use(express.static('public'));
 
+// requires and adds the body-parser module to Express to read the body in a POST request
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
