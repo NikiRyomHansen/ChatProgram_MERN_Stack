@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
             console.log(`--- ${socket.username} left the corner room ---`);
 
             // broadcast to the corner room that the socket has left.
-            socket.broadcast.to('the corner room').emit('leaving the corner room', {
+            socket.broadcast.to(socket.room).emit('leaving the corner room', {
                 username: socket.username
             });
             // Log leaving the corner room to the roomLog
@@ -173,6 +173,7 @@ io.on('connection', (socket) => {
         }
         console.log(`--- ${socket.username} joined: '${room}' ---`);
         socket.join(room, () => {
+            socket.room = room;
             // emit and broadcast the event
             socket.emit('joined corner room emit');
             socket.broadcast.to(room).emit('joined corner room broadcast', {
@@ -228,7 +229,8 @@ io.on('connection', (socket) => {
             username: socket.username
         });
 
-        // TODO: Log to the roomLog when the user disconnects, log which room the user leaves.
+        // Log to the roomLog that the user leaves its current room
+        roomLog(socket.id, socket.username, undefined, socket.room);
         // log the disconnect to the eventLog
         eventLog(socket.id, socket.username, 'DISCONNECT', undefined, undefined,
             'Error logging "disconnect"');
