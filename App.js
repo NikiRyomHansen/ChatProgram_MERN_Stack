@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     socket.username = "Anonymous";
 
     // Log the connected socket to the db.
-    eventLog(socket.id, socket.username, 'CONNECTION', undefined, undefined,
+    events(socket.id, socket.username, 'CONNECTION', undefined, undefined,
         'Error logging connection');
 
     // Listen on 'connection successful', assign the sockets room to 'main room', emit and broadcast the new user
@@ -56,7 +56,9 @@ io.on('connection', (socket) => {
             username: socket.username
         });
         // log "main room" to the roomLog when a client connects
-        roomLog(socket.id, socket.username, 'main room', undefined);
+        roomLog(socket.id, socket.username, 'main room');
+        events(socket.id, socket.username, 'JOIN', undefined, undefined,
+            `Error joining ${socket.room}`);
     });
 
     // Listen on "switch room" and join the room the client requests
@@ -70,7 +72,7 @@ io.on('connection', (socket) => {
                 socket.broadcast.to('main room').emit('left room', {
                     username: socket.username
                 });
-                eventLog(socket.id, socket.username, 'LEAVE', undefined, undefined,
+                events(socket.id, socket.username, 'LEAVE', undefined, undefined,
                     'Error logging leaving main room');
             });
             // Join the corner room and set the sockets room to 'the corner room'
@@ -87,7 +89,7 @@ io.on('connection', (socket) => {
                 socket.broadcast.to(socket.room).emit('new user in room', {
                     username: socket.username
                 });
-                eventLog(socket.id, socket.username, 'JOIN', undefined, undefined,
+                events(socket.id, socket.username, 'JOIN', undefined, undefined,
                     'Error logging joining the corner room');
             });
             // if the socket is in the corner room and clicks the main room btn
@@ -99,7 +101,7 @@ io.on('connection', (socket) => {
                 socket.broadcast.to('the corner room').emit('left room', {
                     username: socket.username
                 });
-                eventLog(socket.id, socket.username, 'LEAVE', undefined, undefined,
+                events(socket.id, socket.username, 'LEAVE', undefined, undefined,
                     'Error logging leaving the corner room');
             });
             // Join the main room and set the sockets room to the 'main room'
@@ -116,7 +118,7 @@ io.on('connection', (socket) => {
                     username: socket.username
                 });
                 // log joining a room
-                eventLog(socket.id, socket.username, 'JOIN', undefined, undefined,
+                events(socket.id, socket.username, 'JOIN', undefined, undefined,
                     'Error logging joining main room');
             });
         } else {
@@ -145,7 +147,7 @@ io.on('connection', (socket) => {
         io.to(`${socket.id}`).emit('change username', data.username);
 
         // log change username to the eventlog
-        eventLog(socket.id, socket.username, 'CHANGE USERNAME', undefined, undefined,
+        events(socket.id, socket.username, 'CHANGE USERNAME', undefined, undefined,
             'Error logging "change username"');
     });
 
@@ -163,7 +165,7 @@ io.on('connection', (socket) => {
         io.to(socket.room).emit('message', message);
 
         // log send message to the event log
-        eventLog(socket.id, socket.username, 'MESSAGE SENT', undefined, undefined,
+        events(socket.id, socket.username, 'MESSAGE SENT', undefined, undefined,
             'Error logging "message"');
     });
 
@@ -190,7 +192,7 @@ io.on('connection', (socket) => {
         // Log to the roomLog that the user leaves its current room
         roomLog(socket.id, socket.username, undefined, socket.room);
         // log the disconnect to the eventLog
-        eventLog(socket.id, socket.username, 'DISCONNECT', undefined, undefined,
+        events(socket.id, socket.username, 'DISCONNECT', undefined, undefined,
             'Error logging "disconnect"');
         console.log(`--- ${socket.username} disconnected ---`);
     });
@@ -200,11 +202,11 @@ io.on('connection', (socket) => {
 /*--- Functions for saving to the DB ---*/
 
 // Log socket events to eventLog collection
-function eventLog(socketId, username, type, date = new Date().toLocaleDateString(),
+function events(socketId, username, type, date = new Date().toLocaleDateString(),
                   time = new Date().toLocaleTimeString(), errorMessage) {
 
     // Create an instance of the eventLog model
-    const eventLogConnection = new eventModel({
+    const eventLog = new eventModel({
         socketId: socketId,
         username: username,
         type: type,
@@ -212,8 +214,8 @@ function eventLog(socketId, username, type, date = new Date().toLocaleDateString
         time: time
     });
     // Save the instance to the db, if error print errorMessage and the error.
-    return eventLogConnection.save()
-        .catch(err => console.log(`*** ${errorMessage} *** ${err}`));
+    return eventLog.save()
+        .catch(error => console.log(`errorMessage: ${errorMessage}, error: ${error}`));
 }
 
 // Log each message sent to the history collection
@@ -228,8 +230,10 @@ function historyLog(socketId, username, message, room) {
     });
     // Save the instance to the db, if error log it to the eventLog
     history.save()
-        .catch(eventLog(socketId, username, 'ERROR', undefined, undefined,
-            'Error while saving to roomLog'));
+        .catch(error => {
+            events(socketId, username, 'HISTORY ERROR', undefined, undefined,
+                `Error while saving to history. Error message: ${error}`);
+        });
 
     return history;
 }
@@ -246,6 +250,10 @@ function roomLog(socketId, username, joinedRoom = undefined, leftRoom = undefine
     });
     // Save the instance to the db, if error log it to the eventLog
     return roomLog.save()
-        .catch(eventLog(socketId, username, 'ERROR', undefined, undefined,
-            'Error while saving to roomLog'));
+        .catch(error => {
+            events(socketId, username, 'ROOM ERROR', undefined, undefined,
+                `Error while saving to roomLog. Error message: ${error}`);
+        })
+        // .catch(eventLog(socketId, username, 'ROOM ERROR', undefined, undefined,
+        //     'Error while saving to roomLog'));
 }
