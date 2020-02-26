@@ -8,12 +8,8 @@ app.set('view engine', 'ejs');
 // access the public directory for the stylesheet (CSS)
 app.use(express.static('public'));
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-// using middleware to connect our end points??? TODO: Is this correct??
 app.use('/', routes);
+
 // Listening on port 8080
 server = app.listen(8080, () => {
     console.log('Listening on port: 8080');
@@ -53,7 +49,7 @@ io.on('connection', (socket) => {
     socket.emit('connection successful');
 
     // log "main room" to the roomLog when a client connects
-    roomLog(socket.id, socket.username, 'MAIN ROOM', undefined);
+    roomLog(socket.id, socket.username, 'main room', undefined);
 
     // Listen on "main room" and join main room
     socket.on('main room', () => {
@@ -66,17 +62,18 @@ io.on('connection', (socket) => {
             return;
         }
         socket.join('main room', () => {
+            socket.room = 'main room';
             console.log(`--- ${socket.username} joined main room ---`);
 
             // emits a message to the client
             socket.emit('joined main room emit');
 
             // broadcast a message to all other clients informing this socket has joined the room
-            socket.broadcast.to('main room').emit('joined main room broadcast', {
+            socket.broadcast.to(socket.room).emit('joined main room broadcast', {
                 username: socket.username
             });
             // Log joining the main room to the roomLog
-            roomLog(socket.id, socket.username, 'MAIN ROOM');
+            roomLog(socket.id, socket.username, 'main room');
 
             // Log joining the main room to the eventLog
             eventLog(socket.id, socket.username, 'JOIN', undefined, undefined,
@@ -101,7 +98,7 @@ io.on('connection', (socket) => {
                 username: socket.username
             });
             // Log leaving the corner room to the roomLog
-            roomLog(socket.id, socket.username, undefined, 'THE CORNER ROOM');
+            roomLog(socket.id, socket.username, undefined, 'the corner room');
 
             // log leaving the corner room to the eventLog
             eventLog(socket.id, socket.username, 'LEAVE', undefined, undefined,
@@ -183,7 +180,7 @@ io.on('connection', (socket) => {
             });
 
             // log joining the corner room and leaving the main room
-            roomLog(socket.id, socket.username, 'THE CORNER ROOM', undefined);
+            roomLog(socket.id, socket.username, 'the corner room', undefined);
             // Log joining the corner room
             eventLog(socket.id, socket.username, 'JOIN', undefined, undefined,
                 'Error logging "the corner room"');
@@ -196,7 +193,7 @@ io.on('connection', (socket) => {
         socket.leave('main room', () => {
             console.log(`--- ${socket.username} left main room ---`);
             // Log leaving the main room to the roomLog
-            roomLog(socket.id, socket.username, undefined, 'MAIN ROOM');
+            roomLog(socket.id, socket.username, undefined, 'main room');
             // Log leaving main room to the eventLog
             eventLog(socket.id, socket.username, 'LEAVE', undefined, undefined,
                 'Error logging "main room"');
@@ -230,6 +227,7 @@ io.on('connection', (socket) => {
         socket.broadcast.to(room).emit('user disconnected', {
             username: socket.username
         });
+
         // TODO: Log to the roomLog when the user disconnects, log which room the user leaves.
         // log the disconnect to the eventLog
         eventLog(socket.id, socket.username, 'DISCONNECT', undefined, undefined,
