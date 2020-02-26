@@ -3,8 +3,8 @@
 const routes = require('express').Router();
 
 // requiring mongoose models
-const historyModel = require('../models/History');
-const eventLog = require('../models/EventLog');
+const historyModel = require('../models/HistorySchema');
+const eventLog = require('../models/EventSchema');
 const roomModel = require('../models/RoomSchema');
 
 

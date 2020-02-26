@@ -16,8 +16,6 @@ $(function () {
     // Listen on connect and emit main room and new user
     socket.on('connect', () => {
         socket.emit('connection successful');
-        socket.emit('main room', 'main room');
-        socket.emit('new user');
     });
 
     // Listen on connection successful and append a message to the client.
@@ -26,7 +24,12 @@ $(function () {
             "change your username if you wish to or stay anonymous.</p>");
     });
 
-    // Emit typing TODO: Only to current room
+    // Listen on 'new user' and append a message that is broadcast to all sockets
+    socket.on('new user in room', (data) => {
+        chatRoom.append(`<p>${data.username} has joined the chat!</p>`);
+    });
+
+    // Emit typing
     message.bind('keypress', () => {
         socket.emit('typing');
     });
@@ -125,51 +128,33 @@ $(function () {
         chatRoom.append("<p class='message'>Stop trying to send an empty message silly...</p>");
     });
 
-    // Listen on leaving main room - broadcast message when leaving room
-    socket.on('leaving main room', (data) => {
-        chatRoom.append(`<p class='message'>${data.username} has left the channel</p>`);
-    });
-
     // on clicking mainRoomBtn emit "main room" and "leave corner room" sending "the corner room" to the server
     mainRoomBtn.click(() => {
-        socket.emit('main room');
-        socket.emit('leave corner room', 'the corner room');
+        socket.emit('switch room', 'main room');
+        // socket.emit('leave corner room', 'the corner room');
     });
 
-    // Listen on "joined main room emit" and append a message to the chatRoom
-    socket.on('joined main room emit', () => {
-        chatRoom.append("<p class='message'>You have joined the Main Room</p>");
+    // Listen on 'switch room', depending on the data sent by the server, enter either if statements
+    socket.on('switch room', (data) => {
+        if (data.room === 'the corner room') {
+            chatRoom.append("<p class='message'>You have joined 'The Corner'</p>");
+        } else if (data.room === 'main room') {
+            chatRoom.append("<p class='message'>You have joined the 'Main Room'</p>");
+        }
     });
 
-    // Listen on "joined main room broadcast" and append a message to the chatroom
-    socket.on('joined main room broadcast', (data) => {
-        chatRoom.append(`<p class='message'>${data.username} has joined the channel!</p>`);
-    });
-
-    // Listen on "leaving the corner room" and append a message to the chatRoom
-    socket.on('leaving the corner room', (data) => {
-        chatRoom.append(`<p class='message'>${data.username} has left the channel</p>`);
+    socket.on('left room', (data) => {
+        chatRoom.append(`<p>${data.username} has left the chat</p>`)
     });
 
     // on clicking theCornerBtn, emit "the corner room"
     theCornerBtn.click(function () {
-        socket.emit('the corner room', 'the corner room');
-    });
-
-    // listen on joined corner room emit and inform the client that it has changed channel
-    socket.on('joined corner room emit', () => {
-        chatRoom.append("<p class='message'>You have joined The Corner Room</p>");
-    });
-
-    // listen on joined corner room broadcast and inform all clients in the channel who has joined
-    socket.on('joined corner room broadcast', (data) => {
-        chatRoom.append(`<p class='message'>${data.username} has joined the channel!</p>`);
+        socket.emit('switch room', 'the corner room');
     });
 
     // listen on "already in room"
     socket.on('already in room', (room) => {
         chatRoom.append(`<p>You are already in '${room}'</p>`);
     });
-
 
 }); // end of function
