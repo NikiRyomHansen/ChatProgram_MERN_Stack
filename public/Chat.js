@@ -11,6 +11,7 @@ $(function () {
     const chatRoom = $('#chatroom');
     const isTyping = $('#is_typing');
     const theCornerBtn = $('#the_corner');
+    const mainRoomBtn = $('#main_room');
 
     // Listen on connect and emit main room and new user
     socket.on('connect', () => {
@@ -45,26 +46,73 @@ $(function () {
         socket.emit('main room message', {
             message: message.val()
         });
+        // Clear the message input field
         message.val('');
         socket.emit('not typing');
     });
+
+    // when the client hits ENTER on their keyboard emit the message
+    message.on('keydown', ((e) => {
+        if(e.keyCode === 13 || e.which === 13) {
+            socket.emit('main room message', {
+                message: message.val()
+            });
+            // Clear the message input field
+            message.val('');
+            socket.emit('not typing');
+        }
+    }));
 
     // Listen on new_message
     socket.on('main room message', (data) => {
         chatRoom.append(`<p class='message_main'>${data.username}: ${data.message}</p>`);
     });
 
-    // Emit a username
+    // on clicking changeUsername
     changeUsername.click(function () {
+        // if the username input field is empty, append a message to the user
+        if (username.val() === '') {
+            chatRoom.append('<p>Username cannot be empty</p>');
+            return;
+        }
+        // Emit "change username" and get the value of input field #username
         socket.emit('change username', {
             username: username.val()
         });
+        // clear the username input field after 50 ms
+        setTimeout(() => {
+            username.val('');
+        }, 50);
     });
+
+    // on [Enter], emit "change username"
+    username.on('keydown', ((e) => {
+        if (e.keyCode === 13 || e.which === 13) {
+            // if the username input field is empty, append a message to the user
+            if (username.val() === '') {
+                chatRoom.append('<p>Username cannot be empty</p>');
+                return;
+            }
+            socket.emit('change username', {
+                username: username.val()
+            });
+            // clear the username input field after 50 ms
+            setTimeout(() => {
+                username.val('');
+            }, 50);
+        }
+    }));
 
     // Listen to a username change
     socket.on('change username', (data) => {
         console.log('username changed to:', data);
-        chatRoom.append(`<p class='message'>You changed your username to: ${username.val()}</p>`);
+        chatRoom.append(`<p class='message'>You changed your username to: ${data}</p>`);
+    });
+
+    // Listen on "invalid username"
+    socket.on('invalid username', (data) => {
+        if (username.val() === data.username)
+            chatRoom.append(`<p>Username cannot be empty or equal to your old username</p>`);
     });
 
     // Listen on "user disconnected" and append a message to the chatroom
@@ -82,9 +130,25 @@ $(function () {
         chatRoom.append(`<p class='message'>${data.username} has left the channel</p>`);
     });
 
-    // listen on new user in chat and broadcast a message to users
-    socket.on('new user in chat', () => {
-        chatRoom.append("<p class='message'>New user has joined the chat!</p>");
+    // on clicking mainRoomBtn emit "main room" and "leave corner room" sending "the corner room" to the server
+    mainRoomBtn.click(() => {
+        socket.emit('main room');
+        socket.emit('leave corner room', 'the corner room');
+    });
+
+    // Listen on "joined main room emit" and append a message to the chatRoom
+    socket.on('joined main room emit', () => {
+        chatRoom.append("<p class='message'>You have joined the Main Room</p>");
+    });
+
+    // Listen on "joined main room broadcast" and append a message to the chatroom
+    socket.on('joined main room broadcast', (data) => {
+        chatRoom.append(`<p class='message'>${data.username} has joined the channel!</p>`);
+    });
+
+    // Listen on "leaving the corner room" and append a message to the chatRoom
+    socket.on('leaving the corner room', (data) => {
+        chatRoom.append(`<p class='message'>${data.username} has left the channel</p>`);
     });
 
     // on clicking theCornerBtn, emit "the corner room"
@@ -100,6 +164,11 @@ $(function () {
     // listen on joined corner room broadcast and inform all clients in the channel who has joined
     socket.on('joined corner room broadcast', (data) => {
         chatRoom.append(`<p class='message'>${data.username} has joined the channel!</p>`);
+    });
+
+    // listen on "already in room"
+    socket.on('already in room', (room) => {
+        chatRoom.append(`<p>You are already in '${room}'</p>`);
     });
 
     // Emits a message to the corner room
@@ -118,32 +187,4 @@ $(function () {
     });
 
 
-
 }); // end of function
-
-/*
-    // Emits "user history" on click
-    userHistory.click(() => {
-        socket.emit('user history');
-    });
-
-    // on clicking userHistoryByRoom, emit "user history by room"
-    userHistoryByRoom.click(() => {
-        socket.emit('user history by room');
-    });
-TODO: Possibly add an admin who can view the history, so not all users can see the history
-socket.on('display user history', () => {
-    // get request for /api/history, getting all the data in the history collection
-    $.get('http://localhost:8080/api/history', (data) => {
-        chatRoom.append("<p>Chat record from the history collection:</p>")
-        // iterate through each JSON object in the collection and call addMessage to append it to the chatRoom
-        data.forEach(addMessage);
-    });
-});
-    // appends a message to the chatRoom
-    function addMessage(data) {
-        chatRoom.append(`<p class='message_main'>${data.username}: ${data.message}</p>`);
-    }
-
-
-*/
