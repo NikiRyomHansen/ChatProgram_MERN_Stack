@@ -40,22 +40,11 @@ const roomModel = require('./models/RoomSchema');
 
 // Require socket.io
 const io = require('socket.io')(server);
-
+// TODO: Add Eventlogging to all error messages.
 // on connection
 io.on('connection', (socket) => {
     // Default username to give all connecting clients
     socket.username = "Anonymous";
-
-    // Listen on "user history"
-    socket.on('user history', () => {
-        // Emits "display user history" and sends the mongoose query sending all JSON objects in "history" to the client
-        socket.emit('display user history', (req, res) => {
-            historyModel.find({}, (err, history) => {
-                if (err) return err;
-                res.send(history);
-            });
-        });
-    });
 
     // Log the connected socket to the db.
     eventLogging(socket.id, socket.username, 'CONNECTION', undefined, undefined,
@@ -64,10 +53,11 @@ io.on('connection', (socket) => {
     // Emit connection successful
     socket.emit('connection successful');
 
+    // log "main room" to the roomLog when a client connects
     roomLog(socket.id, socket.username, 'main room', undefined,
         'Error saving roomLog to db when joining "main room"');
 
-    // join main room
+    // Listen on "main room" and join main room
     socket.on('main room', (room) => {
         console.log('---', socket.username, 'joined:', room, '---');
         socket.join(room);
@@ -78,7 +68,7 @@ io.on('connection', (socket) => {
     });
 
     // Broadcast a message that a new user has joined to the main room
-    socket.broadcast.to('main room').emit('new user in chat')
+    socket.broadcast.to('main room').emit('new user in chat');
 
     // Listen on change_username
     socket.on('change username', (data) => {
@@ -99,7 +89,7 @@ io.on('connection', (socket) => {
 
     // listen on main room message
     socket.on('main room message', (data) => {
-        // if the message equals and empty string emit 'empty message'
+        // if the message equals an empty string emit 'empty message'
         if (data.message === '') {
             socket.emit('empty message');
             return;
@@ -108,7 +98,7 @@ io.on('connection', (socket) => {
         const message = sendMessage(socket.id, socket.username, data.message, 'main room',
             'Error saving main room message to the db');
 
-        // emit message to main room
+        // emit the message to main room emitting "main room message"
         io.to('main room').emit('main room message', message);
 
         // log send message to the event log
@@ -148,10 +138,8 @@ io.on('connection', (socket) => {
                 'Error logging "the corner room"');
         });
         // leaving the 'main room'
-        socket.leave('main room', (err) => {
+        socket.leave('main room', () => {
             console.log('---', socket.username, 'left main room ---');
-            if (err)
-                console.log('*** Error leaving main room ***', err);
 
             // Log leaving main room
             eventLogging(socket.id, socket.username, 'LEAVE', undefined, undefined,
@@ -172,7 +160,6 @@ io.on('connection', (socket) => {
             'Error saving main room message to the db');
 
         io.to('the corner room').emit('corner room message', message);
-
 
         // Log sending a message in "the corner room"
         eventLogging(socket.id, socket.username, 'MESSAGE SENT', undefined, undefined,
@@ -203,7 +190,22 @@ io.on('connection', (socket) => {
             username: socket.username
         });
     });
-});
+
+    // Listen on "user history"
+    socket.on('user history', () => {
+        // Emits "display user history"
+        socket.emit('display user history');
+        // Log the "user history" event to the DB
+        eventLogging(socket.id, socket.username, 'USER HISTORY', undefined, undefined,
+            'Error logging the user history');
+    });
+
+    // Listen on "user history by room"
+    socket.on('user history by room', () => {
+        // Emits "display user history by room"
+        socket.emit('display user history by room');
+    });
+}); // on "connection"
 
 /*--- Functions for saving to the DB ---*/
 
@@ -220,7 +222,7 @@ function eventLogging(socketId, username, type, date = new Date().toLocaleDateSt
         time: time
     });
     // Save the instance to the db, if error print errorMessage and the error.
-    eventLogConnection.save()
+    return eventLogConnection.save()
         .catch(err => console.log('***', errorMessage, '***', err));
 }
 
@@ -252,6 +254,6 @@ function roomLog(socketId, username, joinedRoom = undefined, leftRoom = undefine
         leftRoom: leftRoom
     });
     // Save the instance to the db, if error print errorMessage and the error.
-    roomLog.save()
+    return roomLog.save()
         .catch(err => console.log('***', errorMessage, '***', err));
 }
