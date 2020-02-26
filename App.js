@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
             console.log(`--- ${socket.username} left the corner room ---`);
 
             // broadcast to the corner room that the socket has left.
-            socket.broadcast.to('the corner room').emit('leaving the corner room', {
+            socket.broadcast.to(socket.room).emit('leaving the corner room', {
                 username: socket.username
             });
             // Log leaving the corner room to the roomLog
@@ -131,33 +131,33 @@ io.on('connection', (socket) => {
     });
 
     // listen on main room message
-    socket.on('main room message', (data, room) => {
+    socket.on('message', (data) => {
         // if the message equals an empty string emit 'empty message'
         if (data.message === '') {
             socket.emit('empty message');
             return;
         }
-        // Create an instance of the message model
-        const message = historyLog(socket.id, socket.username, data.message, 'MAIN ROOM');
+        // Create an instance of the historyLog and log the message
+        const message = historyLog(socket.id, socket.username, data.message, socket.room);
 
-        // emit the message to main room emitting "main room message"
-        io.to('main room').emit('main room message', message);
+        // emit the message to the room the socket is currently in emitting "main room message"
+        io.to(socket.room).emit('message', message);
 
         // log send message to the event log
         eventLog(socket.id, socket.username, 'MESSAGE SENT', undefined, undefined,
-            'Error logging "main room message"');
+            'Error logging "message"');
     });
 
     // Listen on typing and broadcasts
     socket.on('typing', () => {
-        socket.broadcast.emit('typing', {
+        socket.broadcast.to(socket.room).emit('typing', {
             username: socket.username
         });
     });
 
     // Listen on not typing and then broadcasts to all except current socket
     socket.on('not typing', () => {
-        socket.broadcast.emit('not typing', {
+        socket.broadcast.to(socket.room).emit('not typing', {
             username: socket.username
         });
     });
@@ -173,6 +173,7 @@ io.on('connection', (socket) => {
         }
         console.log(`--- ${socket.username} joined: '${room}' ---`);
         socket.join(room, () => {
+            socket.room = room;
             // emit and broadcast the event
             socket.emit('joined corner room emit');
             socket.broadcast.to(room).emit('joined corner room broadcast', {
@@ -205,30 +206,14 @@ io.on('connection', (socket) => {
 
     });
 
-    // Listen on corner room message and emit a message to that room
-    socket.on('corner room message', (data) => {
-        if (data.message === '') {
-            socket.emit('empty message');
-            return;
-        }
-        // Log the message sent to the historyLog
-        const message = historyLog(socket.id, socket.username, data.message, 'THE CORNER ROOM');
-
-        // Emit the message to the corner room.
-        io.to('the corner room').emit('corner room message', message);
-
-        // Log sending a message in "the corner room"
-        eventLog(socket.id, socket.username, 'MESSAGE SENT', undefined, undefined,
-            'Error logging "corner room message"');
-    });
-
     // Listen on disconnect TODO: Send to the correct room
     socket.on('disconnect', (room) => {
         socket.broadcast.to(room).emit('user disconnected', {
             username: socket.username
         });
 
-        // TODO: Log to the roomLog when the user disconnects, log which room the user leaves.
+        // Log to the roomLog that the user leaves its current room
+        roomLog(socket.id, socket.username, undefined, socket.room);
         // log the disconnect to the eventLog
         eventLog(socket.id, socket.username, 'DISCONNECT', undefined, undefined,
             'Error logging "disconnect"');
