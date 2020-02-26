@@ -26,7 +26,7 @@ $(function () {
             "change your username if you wish to or stay anonymous.</p>");
     });
 
-    // Emit typing
+    // Emit typing TODO: Only to current room
     message.bind('keypress', () => {
         socket.emit('typing');
     });
@@ -43,7 +43,7 @@ $(function () {
 
     // Emit message and not typing to stop the "is typing" from showing after message is sent.
     sendMessage.click(function () {
-        socket.emit('main room message', {
+        socket.emit('message', {
             message: message.val()
         });
         // Clear the message input field
@@ -54,7 +54,7 @@ $(function () {
     // when the client hits ENTER on their keyboard emit the message
     message.on('keydown', ((e) => {
         if(e.keyCode === 13 || e.which === 13) {
-            socket.emit('main room message', {
+            socket.emit('message', {
                 message: message.val()
             });
             // Clear the message input field
@@ -64,8 +64,8 @@ $(function () {
     }));
 
     // Listen on new_message
-    socket.on('main room message', (data) => {
-        chatRoom.append(`<p class='message_main'>${data.username}: ${data.message}</p>`);
+    socket.on('message', (data) => {
+        chatRoom.append(`<p class='message'>${data.username}: ${data.message}</p>`);
     });
 
     // on clicking changeUsername
@@ -169,21 +169,6 @@ $(function () {
     // listen on "already in room"
     socket.on('already in room', (room) => {
         chatRoom.append(`<p>You are already in '${room}'</p>`);
-    });
-
-    // Emits a message to the corner room
-    sendMessageCorner.click(() => {
-        socket.emit('corner room message', {
-            message: message.val()
-        });
-        // Clears the input field
-        message.val('');
-        socket.emit('not typing');
-    });
-
-    // Listen on corner room message
-    socket.on('corner room message', (data) => {
-        chatRoom.append(`<p class='message_main'>${data.username}: ${data.message}</p>`);
     });
 
 
