@@ -11,8 +11,6 @@ $(function () {
     const chatRoom = $('#chatroom');
     const isTyping = $('#is_typing');
     const theCornerBtn = $('#the_corner');
-    const userHistory = $('#user_history');
-    const userHistoryByRoom = $('#user_history_by_room');
 
     // Listen on connect and emit main room and new user
     socket.on('connect', () => {
@@ -119,30 +117,33 @@ $(function () {
         chatRoom.append(`<p class='message_main'>${data.username}: ${data.message}</p>`);
     });
 
+
+
+}); // end of function
+
+/*
     // Emits "user history" on click
     userHistory.click(() => {
         socket.emit('user history');
-    });
-
-    // TODO: Possibly add an admin who can view the history, so not all users can see the history
-    // Listen on "display user history" and gets the messages collection from the db.
-    socket.on('display user history', () => {
-        // get request for /api/history, getting all the data in the history collection
-        $.get('http://localhost:8080/api/history', (data) => {
-            chatRoom.append("<p>Chat record from the history collection:</p>")
-            // iterate through each JSON object in the collection and call addMessage to append it to the chatRoom
-            data.forEach(addMessage);
-        });
     });
 
     // on clicking userHistoryByRoom, emit "user history by room"
     userHistoryByRoom.click(() => {
         socket.emit('user history by room');
     });
-
+TODO: Possibly add an admin who can view the history, so not all users can see the history
+socket.on('display user history', () => {
+    // get request for /api/history, getting all the data in the history collection
+    $.get('http://localhost:8080/api/history', (data) => {
+        chatRoom.append("<p>Chat record from the history collection:</p>")
+        // iterate through each JSON object in the collection and call addMessage to append it to the chatRoom
+        data.forEach(addMessage);
+    });
+});
     // appends a message to the chatRoom
     function addMessage(data) {
         chatRoom.append(`<p class='message_main'>${data.username}: ${data.message}</p>`);
     }
 
-}); // end of function
+
+*/
