@@ -12,7 +12,9 @@ app.use(express.static('public'));
 app.use('/', routes);
 const port = process.env.PORT || 3000;
 // Listening on port 8080
-server = app.listen(port, () => {
+server = app
+    .use((req, res) => res.sendFile('/views/index.ejs', {root: __dirname}))
+    .listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
 
