@@ -1,9 +1,10 @@
 {
-  "name": "untitled",
+  "name": "chataway",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon App.js"
+    "start": "node App.js",
+    "start:dev": "nodemon App.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
