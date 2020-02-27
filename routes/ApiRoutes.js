@@ -1,10 +1,13 @@
-/*--- All API routing and DB connection is in this file ---*/
+/*--- All API routing is in this file ---*/
 
 const routes = require('express').Router();
 
+// require log methods
+const apiLog = require('../logs/ApiLog');
+
 // requiring mongoose models
 const historyModel = require('../models/HistorySchema');
-const eventLog = require('../models/EventSchema');
+const eventModel = require('../models/EventSchema');
 const roomModel = require('../models/RoomSchema');
 
 // get request for the root, index view
@@ -13,10 +16,16 @@ routes.get('/', (req, res) => {
     res.render('index');
 });
 
+// get request returning the api file containing a list of api commands / paths.
+routes.get('/api', (req, res) => {
+    apiLog('/api');
+    res.render('api');
+});
 
 // api get request, querying all JSON objects in the collection history
 routes.get('/api/history', (req, res) => {
     console.log('--- GET /api/history was requested ---');
+    apiLog('/api/history');
     historyModel.find({}, (err, history) => {
         if (err) return err;
         // returns a response with the JSON objects in the mongoose query
@@ -29,6 +38,7 @@ routes.get('/api/history/:room', async function(req, res) {
     // Get the path variable from the URI
     const room = req.params.room;
     console.log(`--- GET /api/history/${room} was requested ---`);
+    apiLog('/api/history/' + room);
 
     // save the mongoose query in the variable rooms, async await function to ensure the query finishes before
     // before the JSON is returned in the response
@@ -42,15 +52,17 @@ routes.get('/api/history/:room', async function(req, res) {
 // api get request, querying all JSON objects in the collection eventLog
 routes.get('/api/eventlog', (req, res) => {
     console.log('--- GET /api/eventlog was requested ---');
-    eventLog.find({}, (err, eventLog) => {
+    apiLog('/api/eventlog');
+    eventModel.find({}, (err, eventLog) => {
         if (err) return err;
         // returns a response with the JSON objects in the mongoose query
         res.json(eventLog);
     });
 });
 
-routes.get('/api/roomLog', (req, res) => {
+routes.get('/api/roomlog', (req, res) => {
     console.log('--- GET /api/roomLog was requested ---');
+    apiLog('/api/roomlog');
     roomModel.find({}, (err, roomLog) => {
         if (err) return err;
         // returns a response with the JSON objects in the mongoose query

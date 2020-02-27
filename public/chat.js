@@ -1,8 +1,8 @@
 // on page load
 $(function () {
     // make connection, load the socket with the hostname given
-    const socket = io(window.location.hostname); // -- for Heroku hosting
-    // const socket = io('http://localhost:3000'); // -- for localhost
+    // const socket = io(window.location.hostname); // -- for Heroku hosting
+    const socket = io('http://localhost:3000'); // -- for localhost
     console.log('page loaded successfully');
 
     // Declaring ans assigning values to variables for easier and more readable access
