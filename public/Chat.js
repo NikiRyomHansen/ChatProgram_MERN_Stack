@@ -1,6 +1,7 @@
 $(function () {
     // make connection
     const socket = io('https://chataway2020.herokuapp.com/');
+    console.log('page loaded successfully');
 
     // Declaring ans assigning values to variables for easier and more readable access
     const message = $('#message');
@@ -15,6 +16,7 @@ $(function () {
     // Listen on connect and emit main room and new user
     socket.on('connect', () => {
         socket.emit('connection successful');
+        console.log('connection established in socket.io');
     });
 
     // Listen on connection successful and append a message to the client.

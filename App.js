@@ -13,7 +13,6 @@ app.use('/', routes);
 const port = process.env.PORT || 3000;
 // Listening on port 8080
 server = app
-    .use((req, res) => res.render('index', {root: __dirname}))
     .listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
