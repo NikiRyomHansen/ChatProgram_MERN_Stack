@@ -1,7 +1,8 @@
 // on page load
 $(function () {
     // make connection, load the socket with the hostname given
-    const socket = io(window.location.hostname);
+    const socket = io(window.location.hostname); // -- for Heroku hosting
+    // const socket = io('http://localhost:3000'); // -- for localhost
     console.log('page loaded successfully');
 
     // Declaring ans assigning values to variables for easier and more readable access
@@ -33,17 +34,22 @@ $(function () {
 
     // Emit typing on any keypress in the message input field
     message.bind('keypress', () => {
+        if (message.val() === ''){
+            return;
+        }
         socket.emit('typing');
     });
 
     // listen on typing and echo a message to all other sockets
     socket.on('typing', (data) => {
         isTyping.html(`<p><i>${data.username} is typing a message...</i></p>`);
+        console.log('typing')
     });
 
     // listen on stop typing and clear the String
     socket.on('not typing', () => {
         isTyping.html("");
+        console.log('not typing')
     });
 
     // Emit message and not typing to stop the "is typing" from showing after message is sent.

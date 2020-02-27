@@ -186,9 +186,7 @@ io.on('connection', (socket) => {
 
     // Listen on not typing and then broadcasts to all except current socket
     socket.on('not typing', () => {
-        socket.broadcast.to(socket.room).emit('not typing', {
-            username: socket.username
-        });
+        socket.broadcast.to(socket.room).emit('not typing');
     });
 
     // Listen on disconnect
