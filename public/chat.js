@@ -1,5 +1,6 @@
+// on page load
 $(function () {
-    // make connection
+    // make connection, load the socket with the hostname given
     const socket = io(window.location.hostname);
     console.log('page loaded successfully');
 
