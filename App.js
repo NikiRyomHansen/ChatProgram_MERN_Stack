@@ -10,10 +10,10 @@ app.use(express.static('public'));
 
 // Setup middleware for routing, using the ApiRoutes.js file
 app.use('/', routes);
-
+const port = 27017;
 // Listening on port 8080
-server = app.listen(8080, () => {
-    console.log('Listening on port: 8080');
+server = app.listen(port, () => {
+    console.log(`Listening on port: ${port}`);
 });
 // Require socket.io
 const io = require('socket.io')(server);
@@ -25,7 +25,8 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
 //Set up default mongoose connection
-const mongoDB = "mongodb://localhost:27017/chataway";
+const mongoDB = "mongodb+srv://nikiryom:232Chatting@chataway-bbyke.mongodb.net/chataway?retryWrites=true&w=majority";
+
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true})
     .catch(err => (console.log(err)));
 
@@ -74,6 +75,7 @@ io.on('connection', (socket) => {
                 });
                 events(socket.id, socket.username, 'LEAVE', undefined, undefined,
                     'Error logging leaving main room');
+                roomLog(socket.id, socket.username, undefined, 'main room');
             });
             // Join the corner room and set the sockets room to 'the corner room'
             socket.join('the corner room', () => {
@@ -91,6 +93,7 @@ io.on('connection', (socket) => {
                 });
                 events(socket.id, socket.username, 'JOIN', undefined, undefined,
                     'Error logging joining the corner room');
+                roomLog(socket.id, socket.username, 'the corner room');
             });
             // if the socket is in the corner room and clicks the main room btn
         } else if (socket.room === 'the corner room' && data === 'main room') {
@@ -101,8 +104,10 @@ io.on('connection', (socket) => {
                 socket.broadcast.to('the corner room').emit('left room', {
                     username: socket.username
                 });
+                // log the event leaving the corner room
                 events(socket.id, socket.username, 'LEAVE', undefined, undefined,
-                    'Error logging leaving the corner room');
+                    'Error logging leaving the corner room')
+                roomLog(socket.id, socket.username, undefined, 'the corner room');
             });
             // Join the main room and set the sockets room to the 'main room'
             socket.join('main room', () => {
@@ -120,6 +125,7 @@ io.on('connection', (socket) => {
                 // log joining a room
                 events(socket.id, socket.username, 'JOIN', undefined, undefined,
                     'Error logging joining main room');
+                roomLog(socket.id, socket.username, 'main room');
             });
         } else {
             // if the socket is in the room it's trying to join, emit 'already in room' and send the room to the client

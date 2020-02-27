@@ -1,12 +1,11 @@
 $(function () {
     // make connection
-    const socket = io.connect('http://localhost:8080');
+    const socket = io.connect('http://localhost:27017');
 
     // Declaring ans assigning values to variables for easier and more readable access
     const message = $('#message');
     const username = $('#username');
     const sendMessage = $('#send_message');
-    const sendMessageCorner = $('#send_message_corner');
     const changeUsername = $('#change_username');
     const chatRoom = $('#chatroom');
     const isTyping = $('#is_typing');
@@ -29,17 +28,17 @@ $(function () {
         chatRoom.append(`<p>${data.username} has joined the chat!</p>`);
     });
 
-    // Emit typing
+    // Emit typing on any keypress in the message input field
     message.bind('keypress', () => {
         socket.emit('typing');
     });
 
-    // listen on typing
+    // listen on typing and echo a message to all other sockets
     socket.on('typing', (data) => {
         isTyping.html(`<p><i>${data.username} is typing a message...</i></p>`);
     });
 
-    // listen on stop typing
+    // listen on stop typing and clear the String
     socket.on('not typing', () => {
         isTyping.html("");
     });
