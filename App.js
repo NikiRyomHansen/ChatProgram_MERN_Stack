@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 server = app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
+
 // Require socket.io
 const io = require('socket.io')(server);
 
