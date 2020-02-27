@@ -1,6 +1,6 @@
 $(function () {
     // make connection
-    const socket = io();
+    const socket = io('https://chataway2020.herokuapp.com/');
 
     // Declaring ans assigning values to variables for easier and more readable access
     const message = $('#message');
