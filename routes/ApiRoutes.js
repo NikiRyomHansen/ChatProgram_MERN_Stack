@@ -9,10 +9,10 @@ const roomModel = require('../models/RoomSchema');
 
 
 // get request for the root, index view
-routes.get('/', (req, res) => {
-    // Returns the rendered view of the index file to the client
-    res.render('index');
-});
+// routes.get('/', (req, res) => {
+//     // Returns the rendered view of the index file to the client
+//     res.render('index');
+// });
 
 // api get request, querying all JSON objects in the collection history
 routes.get('/api/history', (req, res) => {

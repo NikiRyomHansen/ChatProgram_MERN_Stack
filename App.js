@@ -10,11 +10,14 @@ app.use(express.static('public'));
 
 // Setup middleware for routing, using the ApiRoutes.js file
 app.use('/', routes);
-const port = 27017;
+const port = process.env.PORT || 3000;
 // Listening on port 8080
-server = app.listen(port, () => {
+server = app
+    .use((req, res) => res.sendFile('/views/index.ejs', {root: __dirname}))
+    .listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
+
 // Require socket.io
 const io = require('socket.io')(server);
 
