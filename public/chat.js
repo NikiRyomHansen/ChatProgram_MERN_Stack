@@ -123,7 +123,7 @@ $(function () {
     // Listen on "invalid username"
     socket.on('invalid username', (data) => {
         if (username.val() === data.username)
-            chatRoom.append(`<p>Username cannot be empty or equal to your old username</p>`);
+            chatRoom.append(`<p>Username cannot be equal to your old username</p>`);
     });
 
     // Listen on "user disconnected" and append a message to the chatroom
