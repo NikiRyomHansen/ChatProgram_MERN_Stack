@@ -2,13 +2,16 @@
 
 const routes = require('express').Router();
 
+
+
 // require log methods
-const apiLog = require('../logs/ApiLog');
+const apiLog = require('../logs/ApiLog'); // logs the api calls
 
 // requiring mongoose models
 const historyModel = require('../models/HistorySchema');
 const eventModel = require('../models/EventSchema');
 const roomModel = require('../models/RoomSchema');
+const apiModel = require('../models/ApiSchema');
 
 // get request for the root, index view
 routes.get('/', (req, res) => {
@@ -49,7 +52,7 @@ routes.get('/api/history/:room', async function(req, res) {
     res.json(rooms);
 });
 
-// api get request, querying all JSON objects in the collection eventLog
+// api get request, querying all JSON objects in the collection eventlog
 routes.get('/api/eventlog', (req, res) => {
     console.log('--- GET /api/eventlog was requested ---');
     apiLog('/api/eventlog');
@@ -60,14 +63,33 @@ routes.get('/api/eventlog', (req, res) => {
     });
 });
 
+// api get request, querying all JSON objects in the collection roomlog
 routes.get('/api/roomlog', (req, res) => {
-    console.log('--- GET /api/roomLog was requested ---');
+    console.log('--- GET /api/roomlog was requested ---');
     apiLog('/api/roomlog');
     roomModel.find({}, (err, roomLog) => {
         if (err) return err;
         // returns a response with the JSON objects in the mongoose query
         res.json(roomLog);
     });
+});
+
+// api get request, querying all JSON objects in the collection apilog
+routes.get('/api/apilog', (req, res) => {
+    console.log('--- GET /api/apilog was requested ---');
+    apiLog('/api/apilog');
+    apiModel.find({}, (err, theApiLog) => {
+        if (err) return err;
+        // returns a response with the JSON objects in the mongoose query
+        res.json(theApiLog);
+    });
+});
+
+// handle status code 404 if the page isn't found
+routes.use((req, res) => {
+    res.type("text/plain");
+    res.status(404);
+    res.send('404 - Not found \nGo to /api for possible URLs');
 });
 
 // exports the module so we can require it in other files.
