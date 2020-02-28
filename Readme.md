@@ -1,3 +1,7 @@
+This application is made by:\
+Niki Ryom Hansen, #101293661
+
+
 ## Welcome to ChatAway!
 ChatAway is a Web-Application that servers as a communication tool.
 In ChatAway you can find different rooms and will be able to communicate with other
