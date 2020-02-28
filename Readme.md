@@ -10,11 +10,11 @@ users in the same room.
 #### How to use the app
 ChatAway is hosted on Heroku and therefore there is nothing further for you to do, 
 other than enter this URL Address into your address bar:\
-https://chataway2020.herokuapp.com/
+http://chattingallday.herokuapp.com/
 
 #### API
 For information about available API calls please visit:\
-https://chataway2020.herokuapp.com/api
+http://chattingallday.herokuapp.com/api
 
 #### Run it locally
 To run the application locally do the following:
@@ -23,4 +23,4 @@ To run the application locally do the following:
 3. Go to "~/DBConnection.js and comment line 9 and input your own local MongoDB connection string on line 12.
 
 You are now set to run the application on your local machine through 'localhost:3000'! Have fun!
-> 
+
