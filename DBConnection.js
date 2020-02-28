@@ -1,3 +1,5 @@
+/*--- MongoDB and mongoose setup ---*/
+
 module.exports = function dbConnection() {
 //Import the mongoose module
     const mongoose = require('mongoose');

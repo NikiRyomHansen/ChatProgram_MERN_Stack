@@ -1,3 +1,5 @@
+/*--- Client setup ---*/
+
 // on page load
 $(function () {
     // make connection, load the socket with the hostname given

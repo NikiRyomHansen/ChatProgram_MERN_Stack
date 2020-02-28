@@ -22,4 +22,5 @@ To run the application locally do the following:
 2. Go to "~/public/chat.js", comment line 4 and uncomment line 5.
 3. Go to "~/DBConnection.js and comment line 9 and input your own local MongoDB connection string on line 12.
 
-You are now set to run the application on your local machine! Have fun!
+You are now set to run the application on your local machine through 'localhost:3000'! Have fun!
+

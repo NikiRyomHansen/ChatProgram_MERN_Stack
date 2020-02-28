@@ -1,8 +1,6 @@
-/*--- All API routing is in this file ---*/
+/*--- Routing setup ---*/
 
 const routes = require('express').Router();
-
-
 
 // require log methods
 const apiLog = require('../logs/ApiLog'); // logs the api calls
