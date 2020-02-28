@@ -1,4 +1,4 @@
-This application is made by:
+This application is made by:\
 Niki Ryom Hansen, #101293661
 
 
