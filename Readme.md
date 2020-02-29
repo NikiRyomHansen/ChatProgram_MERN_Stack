@@ -1,5 +1,6 @@
 This application is made by:\
 Niki Ryom Hansen, #101293661
+
 Alejandro Gutierrez, #101076184
 
 ## Welcome to ChatAway!
