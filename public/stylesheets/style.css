@@ -1,14 +1,57 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+  margin-left: 10px;
 }
 
-a {
-  color: #00B7FF;
+#body-container {
+  margin-left: 10px;
+  max-width: 80%;
+  background-color: white;
+  border-style: solid;
+  border-width: thin;
+}
+
+#feedback {
+  border: none;
+  background: #f1f1f1;
+  min-height: 280px;
+  max-height: 280px;
+  height: 100%;
+  overflow: auto;
+  overflow-wrap: break-word;
+  margin-left: 0.8%;
+  margin-right: 0.8%;
+  padding: 5px;
 }
 
 button {
-  width: 150px;
-  margin: 2px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 18px 0 16px 0;
+  border: none;
+  cursor: pointer;
+  width: 30%;
+  margin-bottom:10px;
+  margin-top: 10px;
+  margin-left: 0.8%;
+  opacity: 0.8;
+}
+
+button:hover {
+  opacity: 1;
+}
+
+
+input {
+  width: 95%;
+  padding: 10px 0px 10px 10px;
+  margin-left: 0.8%;
+  font-size: 20px;
+}
+
+#username {
+  width: 40%;
 }
 
