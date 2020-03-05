@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    <meta http-equiv="Content-Type" const="text/html;charset=UTF-8"/>
     <link href="//fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" >
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-    <title>Simple Chat App</title>
+    <title>Chat Away</title>
 </head>
 
 <body>
-<header>
-    <h1>ChatAway</h1>
-</header>
-<section>
-    <div id="rooms">
-        <button id="main_room" type="button">Main Room</button>
-        <button id="the_corner" type="button">The Corner Room</button>
-    </div>
-</section>
+<section id="body-container">
+    <header>
+        <h1>ChatAway</h1>
+    </header>
+    <section>
+        <div id="rooms">
+            <button id="main_room" type="button">Main Room</button>
+            <button id="the_corner" type="button">The Corner Room</button>
+        </div>
+    </section>
 
-<section>
-    <div>
-        <input id="username" type="text" autocomplete="off" />
-        <button id="change_username" type="button">Change username</button>
-    </div>
-</section>
+    <section>
+        <div>
+            <button id="change_username" type="button">Change username</button>
+            <input id="username" type="text" autocomplete="off"/>
+            <br>
+        </div>
+    </section>
 
-<section id="chatroom">
-    <section id="feedback"></section>
-</section>
+    <section id="chatroom">
+        <div id="feedback"></div>
+    </section>
 
-<section id="input_zone">
-    <p id="is_typing"></p>
-    <input id="message" type="text" />
-    <br>
-    <button id="send_message" type="button">Send</button>
+    <section id="input_zone">
+        <p id="is_typing"></p>
+        <input id="message" type="text"/>
+        <br>
+        <button id="send_message" type="button">Send</button>
+    </section>
 </section>
-
 <script src="//code.jquery.com/jquery-latest.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="chat.js"></script>
