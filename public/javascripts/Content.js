@@ -1,2 +1,2 @@
 module.exports.username = 'nikiryom';
-module.exports.password = 'po6VKwl4BOReqnHz';
+module.exports.password = 'SOEpWdSK5YyhY9OV';
