@@ -4,5 +4,5 @@
 /public/javascripts/Content.js
 
 /.idea
-
-.iml
+.env
+*.iml
