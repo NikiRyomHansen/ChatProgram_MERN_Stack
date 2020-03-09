@@ -23,5 +23,6 @@
     "socket.io-client": "latest",
     "utf-8-validate": "^5.0.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+  }
 }
