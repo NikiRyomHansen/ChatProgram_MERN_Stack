@@ -1,8 +1,6 @@
 # Project exclude paths
 /node_modules/
 
-/public/javascripts/Content.js
-
 /.idea
-
-.iml
+.env
+*.iml

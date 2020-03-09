@@ -6,11 +6,11 @@ module.exports = function events(socketId, username, type, date = new Date().toL
 
     // Create an instance of the eventLog model
     const eventLog = new eventModel({
-        socketId: socketId,
-        username: username,
-        type: type,
-        date: date,
-        time: time
+        socketId,
+        username,
+        type,
+        date,
+        time
     });
     // Save the instance to the db, if error print errorMessage and the error.
     return eventLog.save()

@@ -8,10 +8,10 @@ module.exports = function dbConnection() {
     mongoose.Promise = require('bluebird');
 
     // require username and password
-    const content = require('./public/javascripts/Content');
+    const {username, password} = require('./config');
 
 //Set up default mongoose connection
-    const mongoDB = `mongodb+srv://${content.username}:${content.password}@chataway-bbyke.mongodb.net/chataway?retryWrites=true&w=majority`;
+    const mongoDB = `mongodb+srv://${username}:${password}@chataway-bbyke.mongodb.net/chataway?retryWrites=true&w=majority`;
 
     mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true})
         .catch(err => (console.log(err)));
