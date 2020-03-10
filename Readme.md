@@ -1,3 +1,6 @@
+This is the first part of a school project.
+The assignment was to develop a chat application using MongoDB, Express and Node.
+
 This application is made by:\
 Niki Ryom Hansen, #101293661
 
