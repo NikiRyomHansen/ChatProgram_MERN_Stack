@@ -17,11 +17,5 @@ http://chattingallday.herokuapp.com/
 For information about available API calls please visit:\
 http://chattingallday.herokuapp.com/api
 
-#### Run it locally
-To run the application locally do the following:
-1. Clone the git repository to your machine: https://github.com/NikiRyomHansen/ChatProgram_MERN_Stack.git
-2. Go to "~/public/chat.js", comment line 6 and uncomment line 7.
-3. Go to "~/DBConnection.js and comment line 11 and input your own local MongoDB connection string on line 14.
-
 You are now set to run the application on your local machine through 'localhost:3000'! Have fun!
 
