@@ -19,6 +19,3 @@ http://chattingallday.herokuapp.com/
 #### API
 For information about available API calls please visit:\
 http://chattingallday.herokuapp.com/api
-
-You are now set to run the application on your local machine through 'localhost:3000'! Have fun!
-
