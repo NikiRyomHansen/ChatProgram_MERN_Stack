@@ -12,7 +12,7 @@ app.use(express.static('public'));
 
 // Setup middleware for routing, using the Routes.js file
 app.use('/', routes);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 server = app
     .listen(port, () => {
