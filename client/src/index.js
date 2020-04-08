@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import LoginContainer from './components/LoginContainer'
+import LoginBox from "./components/Login";
+import RegisterBox from "./components/RegisterBox";
+import "./sass/loginSty.scss"
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <>
+    <LoginContainer />
+    <LoginBox />
+    <RegisterBox />
+  </>,
   document.getElementById('root')
 );
 
