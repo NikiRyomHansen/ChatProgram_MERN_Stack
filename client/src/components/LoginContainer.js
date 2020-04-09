@@ -3,13 +3,22 @@ import LoginBox from "./Login";
 import EventHistory from "./EventHistory";
 import ChatHistory from "./ChatHistory";
 import Rooms from "./Rooms";
+import Test from "./Test";
 
 class LoginContainer extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {isEventHistoryOpen: false, isLoginOpen: true, isChatHistoryOpen: false, isRoomsOpen: false};
+        this.state = {
+            isEventHistoryOpen: false,
+            isLoginOpen: true,
+            isChatHistoryOpen: false,
+            isRoomsOpen: false,
+            test: false
+        };
     }
+
+
 
     showLoginBox() {
         this.setState({isEventHistoryOpen: false, isLoginOpen: true, isChatHistoryOpen: false, isRoomsOpen: false})
@@ -25,6 +34,17 @@ class LoginContainer extends React.Component {
 
     showRooms() {
         this.setState({isEventHistoryOpen: false, isLoginOpen: false, isChatHistoryOpen: false, isRoomsOpen: true})
+    }
+
+    showTest() {
+        console.log("test 123 here on line 38");
+        this.setState({
+            isEventHistoryOpen: false,
+            isLoginOpen: false,
+            isChatHistoryOpen: false,
+            isRoomsOpen: false,
+            test: true,
+        })
     }
 
 
@@ -49,6 +69,10 @@ class LoginContainer extends React.Component {
                          onClick={this.showRooms.bind(this)}>
                         Rooms
                     </div>
+                    <div className={"controller " + (this.state.test ? "selected-controller" : "")}
+                         onClick={this.showTest.bind(this)}>
+                        test
+                    </div>
 
                 </div>
 
@@ -58,6 +82,7 @@ class LoginContainer extends React.Component {
                     {this.state.isEventHistoryOpen && <EventHistory/>}
                     {this.state.isChatHistoryOpen && <ChatHistory/>}
                     {this.state.isRoomsOpen && <Rooms/>}
+                    {this.state.test && <Test/>}
 
                 </div>
             </div>

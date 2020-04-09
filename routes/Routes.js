@@ -4,12 +4,15 @@ const routes = require('express').Router();
 
 // require log methods
 const apiLog = require('../logs/ApiLog'); // logs the api calls
+const roomAddLog = require('../logs/RoomAddLog');
+
 
 // requiring mongoose models
 const historyModel = require('../models/HistorySchema');
 const eventModel = require('../models/EventSchema');
 const roomModel = require('../models/RoomSchema');
 const apiModel = require('../models/ApiSchema');
+const roomAddModel = require('../models/RoomAddedSchema');
 
 // get request for the root, index view
 routes.get('/', (req, res) => {
@@ -35,7 +38,7 @@ routes.get('/api/history', (req, res) => {
 });
 
 // api get request, querying all JSON objects in the given room in the collection "history"
-routes.get('/api/history/:room', async function(req, res) {
+routes.get('/api/history/:room', async function (req, res) {
     // Get the path variable from the URI
     const room = req.params.room;
     console.log(`--- GET /api/history/${room} was requested ---`);
@@ -43,7 +46,7 @@ routes.get('/api/history/:room', async function(req, res) {
 
     // save the mongoose query in the variable rooms, async await function to ensure the query finishes before
     // before the JSON is returned in the response
-    let rooms = await historyModel.find({room: room })
+    let rooms = await historyModel.find({room: room})
         .catch(err => console.log(err));
 
     // return a the mongoose query rooms in a JSON response.
@@ -81,6 +84,37 @@ routes.get('/api/apilog', (req, res) => {
         // returns a response with the JSON objects in the mongoose query
         res.json(theApiLog);
     });
+});
+
+// api get request, querying all JSON objects in the collection roomAddLog
+routes.get('/api/rooms', (req, res) => {
+    // Check if the corner room in /api/rooms exists
+    roomAddModel.exists({room: "the corner room"}, (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        if (result === false) {
+            // if the room does not exist, add it
+            roomAddLog('the corner room',);
+        }
+    });
+    // Check if the main room in /api/rooms exists
+    roomAddModel.exists({room: "main room"}, (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        if (result === false) {
+            // if the room does not exist, add it
+            roomAddLog('main room',);
+        }
+    });
+    console.log('--- GET /api/rooms was requested ---');
+    roomAddModel.find({}, (err, roomsLog) => {
+        if (err) return err;
+        // returns a response with the JSON objects in the mongoose query
+        res.json(roomsLog);
+    });
+
 });
 
 // handle status code 404 if the page isn't found

@@ -32,6 +32,7 @@ io.on('connection', (socket) => {
             'Error logging connection');
         eventLog(socket.id, socket.username, 'JOIN', undefined, undefined,
             `Error joining ${socket.room}`);
+
         // log "main room" to the roomLog when a client connects
         roomLog(socket.id, socket.username, 'main room');
 

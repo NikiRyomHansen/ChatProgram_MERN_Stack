@@ -1,6 +1,7 @@
 import React from "react";
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import EventHistory from "./EventHistory";
+import LoginContainer from "./LoginContainer";
 
 
 class LoginBox extends React.Component {
@@ -18,6 +19,7 @@ class LoginBox extends React.Component {
             this.showValidationErr("password", "Password cannot be empty!");
         }
         // if user and pass is correct, send them to showAdminBox
+        new LoginContainer().showTest();
 
     }
 
@@ -86,22 +88,25 @@ class LoginBox extends React.Component {
                                placeholder="Password"/>
                         <small className="danger-error">{passwordErr ? passwordErr : ""}</small>
                     </div>
-                    {/*!-- Routing to adminhome -->*/}
+                    {/* Routing to adminhome */}
                     <BrowserRouter>
                         <Link to={{
-                            pathname: "/TODO: This is supposed to be the login path, but it is not implemented yet",
+                            pathname: "adminhome",
                             state: {
-                                isAdminOpen: true
+                                test: true
                             }
                         }}
                               className="login-btn"
                               onClick={this.submitLogin.bind(this)}>Login</Link>
                         <Route>
                             <Switch>
-                                <Route exact path="/eventhistory" component={EventHistory}/>
+                                <Route exact path="/adminhome"/>
                             </Switch>
                         </Route>
                     </BrowserRouter>
+                </div>
+                <div className="logout-btn">
+
                 </div>
             </div>
 
