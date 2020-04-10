@@ -9,6 +9,7 @@ body,
 $blue_theme: #70a1ff;
 //Root Container
 .root-container {
+  margin-top: 3%;
   width: 100%;
   height: 100%;
   display: flex;
@@ -125,6 +126,7 @@ $blue_theme: #70a1ff;
 }
 
 .login-btn {
+  opacity: 100;
   padding: 2px 30px;
   /* background-color: #417cef; */
   border: 0;
@@ -187,4 +189,8 @@ td {
 table {
   border-collapse: collapse;
   border: 2px solid #70a1ff;
+}
+
+.hide {
+  background-color: #4CAF50;
 }

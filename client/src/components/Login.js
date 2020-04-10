@@ -1,26 +1,22 @@
 import React from "react";
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
-import EventHistory from "./EventHistory";
-import LoginContainer from "./LoginContainer";
+import App from "./App";
+import Rooms from "./Rooms";
 
 
 class LoginBox extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {isAdminOpen: false, username: "", password: "", errors: []};
+        this.state = {notLoggedIn: true, isAdminOpen: false, username: "", password: "", errors: []};
     }
 
-    submitLogin(e) {
-        if (this.state.username === "") {
-            this.showValidationErr("username", "Username cannot be empty!");
+    handleSubmit(e) {
+        if (this.state.username === "" || this.state.username !== "admin"
+            && this.state.password === "" || this.state.password !== "admin") {
+            this.showValidationErr("username", "Password or username is incorrect!");
+            this.showValidationErr("password", "Password or username is incorrect");
         }
-        if (this.state.password === "") {
-            this.showValidationErr("password", "Password cannot be empty!");
-        }
-        // if user and pass is correct, send them to showAdminBox
-        new LoginContainer().showTest();
-
     }
 
     showValidationErr(element, msg) {
@@ -49,7 +45,9 @@ class LoginBox extends React.Component {
         this.clearValidationErr("password");
     }
 
+
     render() {
+        const {notLoggedIn} = this.state;
         let usernameErr, passwordErr = null;
         // for each error in the state errors array, print a corresponding error message
         for (let err of this.state.errors) {
@@ -62,6 +60,7 @@ class LoginBox extends React.Component {
         }
 
         return (
+
             <div className="inner-container">
                 <div className="header">
                     Login
@@ -91,24 +90,23 @@ class LoginBox extends React.Component {
                     {/* Routing to adminhome */}
                     <BrowserRouter>
                         <Link to={{
-                            pathname: "adminhome",
+                            pathname: '/App',
                             state: {
-                                test: true
+                                isLoggedIn: true
                             }
                         }}
                               className="login-btn"
-                              onClick={this.submitLogin.bind(this)}>Login</Link>
+                              onClick={this.handleSubmit.bind(this)}>Login</Link>
                         <Route>
                             <Switch>
-                                <Route exact path="/adminhome"/>
+                                <Route exact path="/App"/>
                             </Switch>
                         </Route>
                     </BrowserRouter>
                 </div>
-                <div className="logout-btn">
 
-                </div>
             </div>
+
 
         )
     }
