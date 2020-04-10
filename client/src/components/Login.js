@@ -1,22 +1,27 @@
 import React from "react";
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import App from "./App";
-import Rooms from "./Rooms";
 
 
 class LoginBox extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {notLoggedIn: true, isAdminOpen: false, username: "", password: "", errors: []};
+        this.state = {
+            loggedIn: true,
+            isAdminOpen: false,
+            username: "",
+            password: "",
+            errors: []
+        };
     }
 
     handleSubmit(e) {
-        if (this.state.username === "" || this.state.username !== "admin"
-            && this.state.password === "" || this.state.password !== "admin") {
-            this.showValidationErr("username", "Password or username is incorrect!");
-            this.showValidationErr("password", "Password or username is incorrect");
-        }
+        // if ((this.state.username === "" || this.state.username !== "admin")
+        //     && this.state.password === "" || this.state.password !== "admin") {
+        //     this.showValidationErr("username", "Password or username is incorrect!");
+        //     this.showValidationErr("password", "Password or username is incorrect");
+        // }
     }
 
     showValidationErr(element, msg) {
@@ -60,7 +65,6 @@ class LoginBox extends React.Component {
         }
 
         return (
-
             <div className="inner-container">
                 <div className="header">
                     Login
@@ -92,14 +96,14 @@ class LoginBox extends React.Component {
                         <Link to={{
                             pathname: '/App',
                             state: {
-                                isLoggedIn: true
+                                fromLogin: true
                             }
                         }}
                               className="login-btn"
-                              onClick={this.handleSubmit.bind(this)}>Login</Link>
+                              onClick={this.handleSubmit.bind(this.fromLogin)}>Login</Link>
                         <Route>
                             <Switch>
-                                <Route exact path="/App"/>
+                                <Route path="/App" component={App}/>
                             </Switch>
                         </Route>
                     </BrowserRouter>
