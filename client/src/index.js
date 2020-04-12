@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import * as serviceWorker from './serviceWorker';
-import LoginContainer from './components/LoginContainer'
+import App from './components/App'
 import "./sass/loginSty.scss"
 
 ReactDOM.render(
   <>
-    <LoginContainer />
+    <App />
   </>,
   document.getElementById('root')
 );
