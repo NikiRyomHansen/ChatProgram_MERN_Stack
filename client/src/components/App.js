@@ -9,6 +9,7 @@ import Error from './Error';
 import EventHistory from "./EventHistory";
 import ChatHistory from "./ChatHistory";
 import History from "./History";
+import AddRoom from "./AddRoom";
 
 
 class App extends React.Component {
@@ -35,6 +36,7 @@ class App extends React.Component {
                     <Route path="/eventhistory" component={EventHistory}/>
                     <Route path="/chathistory" component={ChatHistory}/>
                     <Route path="/rooms" component={Rooms}/>
+                    <Route path="/addroom" component={AddRoom}/>
                     <Route path="/logout" component={LoginComponent}/>
                     <Route component={Error}/>
                 </Switch>

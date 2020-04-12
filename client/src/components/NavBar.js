@@ -5,7 +5,6 @@ import {
 
 function NavBar(props) {
 
-    const {history} = props;
 
     return (
         <div className="header-controller">

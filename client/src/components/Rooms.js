@@ -1,4 +1,5 @@
 import React from "react";
+import AddRoomButton from "./AddRoomButton";
 
 class Rooms extends React.Component {
 
@@ -26,7 +27,9 @@ class Rooms extends React.Component {
 
         return (
             <div className="root-container">
+
                 <div className="box-container">
+                    <AddRoomButton />
                     <div className="admin-root-container">
                         <div className="api-container">
                             <table>
