@@ -4,8 +4,6 @@ The assignment was to develop a chat application using MongoDB, Express and Node
 This application is made by:\
 Niki Ryom Hansen, #101293661
 
-Alejandro Gutierrez, #101076184
-
 ## Welcome to ChatAway!
 ChatAway is a Web-Application that serves as a communication tool.
 In ChatAway you can find different rooms and will be able to communicate with other
