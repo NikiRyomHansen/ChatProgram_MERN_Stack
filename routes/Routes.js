@@ -118,6 +118,12 @@ routes.get('/api/rooms', (req, res) => {
     });
 });
 
+// Post request to create a new room
+routes.post('/api/createroom', (req, res, next) => {
+    const room = req.body.name;
+    const status = req.body.status;
+});
+
 // fetch the admin
 routes.get('/api/admins', (req, res) => {
     console.log('--- GET /api/admins was requested ---');
