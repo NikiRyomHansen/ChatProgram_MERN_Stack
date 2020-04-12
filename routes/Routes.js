@@ -119,9 +119,15 @@ routes.get('/api/rooms', (req, res) => {
 });
 
 // Post request to create a new room
-routes.post('/api/createroom', (req, res, next) => {
-    const room = req.body.name;
-    const status = req.body.status;
+routes.post('/api/createroom', (req, res) => {
+    const room = new roomAddModel(req.body);
+    room.save()
+        .then(() => {
+            res.json('Room added successfully');
+        })
+        .catch(() => {
+            res.status(400).send('Unable to save to database');
+        });
 });
 
 // fetch the admin
