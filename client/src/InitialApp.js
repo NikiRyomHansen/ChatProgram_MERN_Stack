@@ -36,7 +36,6 @@ class InitialApp extends Component {
                 />
                 <button type="submit">Submit</button>
             </form>
-
         )
     }
 }

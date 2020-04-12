@@ -9,9 +9,8 @@ body,
 $blue_theme: #70a1ff;
 //Root Container
 .root-container {
-  margin-top: 3%;
   width: 100%;
-  height: 100%;
+  height: 93%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,24 +18,22 @@ $blue_theme: #70a1ff;
 }
 
 .box-controller {
-  visibility: visible;
+  text-align: center;
+  padding: 1.5em;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
-  min-width: 30em;
-  height: 35px;
   -webkit-box-shadow: 0px 0px 20px 0px rgba(15, 15, 15, 0.2);
   box-shadow: 0px 0px 20px 0px rgba(15, 15, 15, 0.2);
-  margin-bottom: 30px;
-  align-items: center;
-  //transition: visibility 0.5s ease-out;
 }
 
 .controller {
+  display: inline-block;
+  margin-right: 1.5em;
+  margin-left: 1.5em;
   flex: 1;
   text-align: center;
   height: 100%;
-  line-height: 2;
+  line-height: 1;
   cursor: pointer;
 }
 
@@ -53,6 +50,7 @@ $blue_theme: #70a1ff;
   box-shadow: 0px 0px 20px 0px rgba(15, 15, 15, 0.2);
   border-radius: 6px;
   padding: 24px;
+  margin-top: -10em;
 }
 
 .inner-container {
@@ -68,8 +66,6 @@ $blue_theme: #70a1ff;
   text-align: center;
   padding: 15px;
   margin-bottom: 17px;
-  /* margin-left: 35px; */
-  /* margin-right: 35px; */
   font-family: Ozxgen, sans-serif;
   font-size: 22px;
   border-bottom: 2px solid $blue_theme;
@@ -121,14 +117,13 @@ $blue_theme: #70a1ff;
 //Input Placeholder
 .login-input::placeholder {
   font-family: Oxygen, sans-serif;
-  font-size: 16px; //color: rgba(46, 213, 116, 0.839);
+  font-size: 16px;
   color: rgba(15, 15, 15, 0.4);
 }
 
 .login-btn {
   opacity: 100;
   padding: 2px 30px;
-  /* background-color: #417cef; */
   border: 0;
   font-size: 18px;
   border-radius: 5px;
@@ -137,7 +132,6 @@ $blue_theme: #70a1ff;
   margin-top: 20px;
   border: 2px solid #417cef;
   text-decoration: none;
-  //transition: background-color 0.3s ease-out;
   cursor: pointer;
 }
 

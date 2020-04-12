@@ -13,6 +13,7 @@ const eventModel = require('../models/EventSchema');
 const roomModel = require('../models/RoomSchema');
 const apiModel = require('../models/ApiSchema');
 const roomAddModel = require('../models/RoomAddedSchema');
+const adminModel = require('../models/AdminSchema');
 
 // get request for the root, index view
 routes.get('/', (req, res) => {
@@ -109,12 +110,24 @@ routes.get('/api/rooms', (req, res) => {
         }
     });
     console.log('--- GET /api/rooms was requested ---');
+    apiLog('/api/rooms');
     roomAddModel.find({}, (err, roomsLog) => {
         if (err) return err;
         // returns a response with the JSON objects in the mongoose query
         res.json(roomsLog);
     });
+});
 
+// fetch the admin
+routes.get('/api/admins', (req, res) => {
+    console.log('--- GET /api/admins was requested ---');
+    apiLog('/api/admins');
+
+    // find the admin in the collection
+    adminModel.find({}, (err, adminLog) => {
+        if (err) return res.send(err);
+        res.json(adminLog);
+    })
 });
 
 // handle status code 404 if the page isn't found

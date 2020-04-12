@@ -25,28 +25,36 @@ class Rooms extends React.Component {
         const {rooms} = this.state;
 
         return (
-            <div className="admin-root-container">
-                <div className="api-container">
-                    <table>
-                        <tr>
-                            <th>ID</th>
-                            <th>Room</th>
-                            <th>Created at</th>
-                            <th>Updated at</th>
-                            <th>Status</th>
-                            <th>Options</th>
-                        </tr>
-                        {/* Map through the state array and return each value in a table cell */}
-                        {rooms.map((events, index) =>
-                            <tr key={index}>
-                                <td>{events._id}</td>
-                                <td>{events.room}</td>
-                                <td>{events.createdAt}</td>
-                                <td>{events.updatedAt}</td>
-                                <td>{events.status}</td>
-                            </tr>
-                        )}
-                    </table>
+            <div className="root-container">
+                <div className="box-container">
+                    <div className="admin-root-container">
+                        <div className="api-container">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Room</th>
+                                    <th>Created at</th>
+                                    <th>Updated at</th>
+                                    <th>Status</th>
+                                    <th>Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {/* Map through the state array and return each value in a table cell */}
+                                {rooms.map((events, index) =>
+                                    <tr key={index}>
+                                        <td>{events._id}</td>
+                                        <td>{events.room}</td>
+                                        <td>{events.createdAt}</td>
+                                        <td>{events.updatedAt}</td>
+                                        <td>{events.status}</td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
