@@ -1,5 +1,7 @@
 import React from "react";
 import AddRoomButton from "./AddRoomButton";
+import axios from 'axios';
+import {Link} from "react-router-dom";
 
 class Rooms extends React.Component {
 
@@ -16,10 +18,11 @@ class Rooms extends React.Component {
 
     // Fetch the api request and store it in the state
     getRoomsLog = () => {
-        fetch('/api/rooms')
-            .then(res => res.json())
+        axios.get('/api/rooms')
+            .then(res => res.data)
             .then(rooms => this.setState({rooms}));
     };
+
 
     render() {
 
@@ -27,7 +30,6 @@ class Rooms extends React.Component {
 
         return (
             <div className="root-container">
-
                 <div className="box-container">
                     <AddRoomButton />
                     <div className="admin-root-container">
@@ -45,13 +47,14 @@ class Rooms extends React.Component {
                                 </thead>
                                 <tbody>
                                 {/* Map through the state array and return each value in a table cell */}
-                                {rooms.map((events, index) =>
-                                    <tr key={index}>
-                                        <td>{events._id}</td>
-                                        <td>{events.room}</td>
-                                        <td>{events.createdAt}</td>
-                                        <td>{events.updatedAt}</td>
-                                        <td>{events.status}</td>
+                                {rooms.map((item) =>
+                                    <tr key={item.room}>
+                                        <td>{item._id}</td>
+                                        <td>{item.room}</td>
+                                        <td>{item.createdAt}</td>
+                                        <td>{item.updatedAt}</td>
+                                        <td>{item.status}</td>
+                                        <td><Link to={`/room/${item.room}`}>Edit</Link></td>
                                     </tr>
                                 )}
                                 </tbody>

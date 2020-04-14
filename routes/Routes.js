@@ -5,6 +5,7 @@ const routes = require('express').Router();
 // require log methods
 const apiLog = require('../logs/ApiLog'); // logs the api calls
 const roomAddLog = require('../logs/RoomAddLog');
+const eventLog = require('../logs/EventLog');
 
 
 // requiring mongoose models
@@ -118,6 +119,20 @@ routes.get('/api/rooms', (req, res) => {
     });
 });
 
+// Get request for a single record of a room
+routes.get('/api/room/:room', (req, res) => {
+    console.log('--- GET "/api/room/:' + req.params.room +  '" was requested ---');
+    // find a room by name
+    roomAddModel.findOne({room: req.params.room}, (err, foundRoom) => {
+        // if room isn't found
+        if (!foundRoom) {
+            res.status(400).json('Unable to find the room')
+        } else {
+            res.json(foundRoom);
+        }
+    }).catch((err) => console.log('Error finding room ' + err));
+});
+
 // Post request to create a new room
 routes.post('/api/createroom', (req, res) => {
     const room = new roomAddModel(req.body);
@@ -128,6 +143,34 @@ routes.post('/api/createroom', (req, res) => {
         .catch(() => {
             res.status(400).send('Unable to save to database');
         });
+});
+
+// Put request to update a room by name
+routes.put('/api/room/:room', (req, res) => {
+    // Find a room by name
+    roomAddModel.findOne({room: req.params.room}, (err, foundRoom) => {
+        // if room isn't found
+        if (!foundRoom) {
+            res.status(400).json('Unable to find the room')
+        } else {
+
+            res.json('Found room: ' + req.params.room);
+
+            console.log(req.body.room)
+            console.log(req.body.status)
+            // Update the room properties with the body
+            foundRoom.room = req.body.room;
+            foundRoom.status = req.body.status;
+
+            // Save the updated room to the database
+            foundRoom.save()
+                .catch(() => {
+                    console.log('Error saving room to database');
+                    eventLog(undefined, 'Admin', 'ERROR', undefined, undefined,
+                        'Error saving a room to database');
+                });
+        }
+    });
 });
 
 // fetch the admin

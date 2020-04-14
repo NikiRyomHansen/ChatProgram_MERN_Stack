@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const newRoom = new Schema(
     {
-        room: String,
-        status: String,
+        room: { type: String, required: true },
+        status: { type: String, required: true }
     },
     {
         timestamps: true

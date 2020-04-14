@@ -2,6 +2,7 @@ import React from "react";
 import {
     Link
 } from "react-router-dom";
+import LoginComponent from "./LoginComponent";
 
 function NavBar(props) {
 
@@ -10,7 +11,7 @@ function NavBar(props) {
         <div className="header-controller">
             <div className="box-controller">
                 <Link to="/eventhistory">
-                    <div className={"controller"}>Event History</div>
+                    <div  className={"controller"}>Event History</div>
                 </Link>
                 <Link to="/chathistory">
                     <div className="controller">Chat History</div>

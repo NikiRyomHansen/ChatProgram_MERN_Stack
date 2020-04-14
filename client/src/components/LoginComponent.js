@@ -8,13 +8,12 @@ const LoginComponent = (props) => {
     // initialize state with an empty array
     const [admins, setAdmins] = useState([]);
 
-    // get the API
+    // get all admins
     const fetchItems = async () => {
         await axios.get('/api/admins')
             .then(res => res.data)
             .then(admin => setAdmins(admin));
         console.log("Admin has been fetched!");
-        console.log()
     };
 
     useEffect(() => {
