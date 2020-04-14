@@ -18,6 +18,7 @@ class App extends React.Component {
         }
     }
 
+    // TODO: Check if the state of badCredentials in LoginComponent is true or false and act accordingly
 
     render() {
 
