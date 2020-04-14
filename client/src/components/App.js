@@ -14,7 +14,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            login: false
+            loggedIn: false
         }
     }
 
@@ -29,7 +29,7 @@ class App extends React.Component {
                 <Route path="/chathistory" component={NavBar}/>
                 <Route path="/rooms" component={NavBar}/>
                 <Switch>
-                    <Route exact path="/" component={LoginComponent}/>
+                    <Route exact path="/" component={<LoginComponent />}/>
                     <Route path="/admin"/>
                     <Route path="/eventhistory" component={EventHistory}/>
                     <Route path="/chathistory" component={ChatHistory}/>
@@ -39,7 +39,6 @@ class App extends React.Component {
                     <Route component={Error}/>
                 </Switch>
             </BrowserRouter>
-
         )
     }
 }

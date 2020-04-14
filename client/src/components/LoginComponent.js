@@ -20,6 +20,8 @@ const LoginComponent = (props) => {
         fetchItems();
     }, []);
 
+
+    /* ------------------------------------------------------------------------------------------------------ */
     // initialize states
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
@@ -44,7 +46,6 @@ const LoginComponent = (props) => {
 
     const onUsernameChange = (e) => {
         setUsername(e.target.value);
-
     };
 
     const onPasswordChange = (e) => {

@@ -18,14 +18,23 @@ const AddRoom = ({match}) => {
         setStatus(e.target.value)
     };
 
+    // TODO: Add a redirect button
 
     const handleSubmit = e => {
         e.preventDefault();
-        if (match.params.name === undefined)
+        console.log(match.params.room)
+        if (match.params.room === undefined) {
             postItem()
+                .then(() => {
+                    setAdded('Added room: "' + room + '", Status: "' + status + '"');
+                })
                 .catch(err => console.log('Error posting item: ' + err));
+        }
         else {
             updateItem()
+                .then(() => {
+                    setAdded('Made changes to room: "' + room + '", Status: "' + status + '"');
+                })
                 .catch(err => console.log('Error updating item: ' + err));
         }
     };
@@ -35,10 +44,7 @@ const AddRoom = ({match}) => {
         await axios.post('/api/createroom', {
             room: room,
             status: status
-        })
-            .then(() => {
-                setAdded('Added the following: Room: ' + room + ', Status: ' + status);
-            });
+        });
     };
 
     // TODO: Handle status code 400 in Routes.js when parameter is empty
@@ -67,7 +73,7 @@ const AddRoom = ({match}) => {
         fetchItem();
     }, []);
 
-
+    // TODO: Add a dropDownList for the status with two options, where inactive is selected
     return (
         <div>
             <form onSubmit={handleSubmit}>
