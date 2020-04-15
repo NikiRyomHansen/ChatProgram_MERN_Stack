@@ -8,6 +8,7 @@ import Error from './Error';
 import EventHistory from "./EventHistory";
 import ChatHistory from "./ChatHistory";
 import AddRoom from "./AddRoom";
+import history from './History';
 
 class App extends React.Component {
 
@@ -15,8 +16,10 @@ class App extends React.Component {
         super(props);
         this.state = {
             loggedIn: false
-        }
+        };
+
     }
+
 
     // TODO: Check if the state of badCredentials in LoginComponent is true or false and act accordingly
 
@@ -30,8 +33,8 @@ class App extends React.Component {
                 <Route path="/chathistory" component={NavBar}/>
                 <Route path="/rooms" component={NavBar}/>
                 <Switch>
-                    <Route exact path="/" component={<LoginComponent />}/>
-                    <Route path="/admin"/>
+                    <Route exact path="/" component={LoginComponent} />
+                    <Route path="/admin" />
                     <Route path="/eventhistory" component={EventHistory}/>
                     <Route path="/chathistory" component={ChatHistory}/>
                     <Route path="/rooms" component={Rooms}/>

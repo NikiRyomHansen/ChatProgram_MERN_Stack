@@ -86,8 +86,9 @@ const LoginComponent = (props) => {
                             </div>
                             <a
                                 className="login-btn"
-                                onClick={
-                                    () => handleSubmit()}>
+                                onClick={() =>
+                                        handleSubmit()
+                                }>
                                 Login
                             </a>
                         </div>
