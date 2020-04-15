@@ -22,7 +22,7 @@ To run the node.js chat application go to the project's root directory and run t
 npm install \
 npm start
 
-The chat application is now to be found on your localhost, port: 3000
+The chat application is now to be found on your localhost, port: 5000
 
 To run the react admin application go to the project's root directory and run the following commands in the terminal:\
 cd client\
@@ -34,7 +34,7 @@ the Node.js server running before you can access any of the requests sent from t
 The Node.js server must be running at all times when using the react application
 
 The react application should open up your browser automatically, if this is not the case, you can find it on your 
-localhost, port: 5000.
+localhost, port: 3000.
 
 The login for the admin application is:\
 username: admin \
