@@ -1,7 +1,6 @@
 // require dotenv to work with the heroku env variables and load them into process.env
-const dotenv = require('dotenv');
-
-dotenv.config();
+if (process.env.NODE_ENV !== 'production')
+    require('dotenv').config();
 
 // export the Atlas cloud username and password - these are obtained from the env variables pushed to Heroku
 // But is temporarily unavailable due to the application not being fully integrated to my heroku domain.
