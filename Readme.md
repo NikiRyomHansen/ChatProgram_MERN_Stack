@@ -1,8 +1,6 @@
-This is the first part of a school project.
-The assignment was to develop a chat application using MongoDB, Express and Node.
-
 This application is made by:
 Niki Ryom Hansen
+Stack used to develop: MERN
 
 ## Welcome to ChatAway!
 ChatAway is a Web-Application that serves as a communication tool.
@@ -18,4 +16,4 @@ http://chattingallday.herokuapp.com/
 For information about available API calls please visit:\
 http://chattingallday.herokuapp.com/api
 
-The React part (admin part) of the chat program is currently not available, you will need to run the application locally for that.
+The React part (admin part) of the chat program is currently not available, you will need to run the application locally for that. The code for React is found in the 'client' directory.
